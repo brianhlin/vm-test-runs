@@ -1,0 +1,9 @@
+universe = local
+executable = ../bin/process-job-output
+arguments = "$(serial) $(jobid)"
+
+output = process-job-output.out
+err = process-job-output.err
+log = process-job-output.log
+
+queue

@@ -12,7 +12,8 @@ BASE_IMAGE_PATH="/mnt/gluster/chtc/VMs"
 
 def generate_dag_fragment(serial, combo):
     platform, sources, package_set = combo
-    node_name = 'TestRun' + serial
+    test_node_name = 'TestRun' + serial
+    post_node_name = 'PostRun' + serial
 
     priority = 0
     if 'osg-tested-internal' in package_set.packages:
@@ -20,10 +21,16 @@ def generate_dag_fragment(serial, combo):
 
     contents = '\n'
     contents += '# Node %s: %s - %s - %s\n' % (serial, platform, sources, ', '.join(package_set.packages))
-    contents += 'JOB %s single-test-run.sub\n' % (node_name)
-    contents += 'VARS %s serial="%s" platform="%s" jobpriority="%d"\n' % (node_name, serial, platform, priority)
-    contents += 'SCRIPT POST %s ../bin/process-job-output %s $JOBID\n' % (node_name, serial)
-    contents += 'PRIORITY %s %d\n' % (node_name, priority)
+    contents += 'JOB %s single-test-run.sub\n' % (test_node_name)
+    contents += 'VARS %s serial="%s" platform="%s" jobpriority="%d"\n' % (test_node_name, serial, platform, priority)
+    contents += 'SCRIPT POST %s ../bin/write-job-id %s $JOBID\n' % (test_node_name, test_node_name)
+    contents += 'PRIORITY %s %d\n' % (test_node_name, priority)
+    contents += '\n'
+    contents += 'JOB %s process-job-output.sub\n' % (post_node_name)
+    contents += 'VARS %s serial="%s"\n' % (post_node_name, serial)
+    contents += '\n'
+    contents += 'PARENT %s CHILD %s\n' %(test_node_name, post_node_name)
+
     return contents
 
 def write_osg_test_configuration(serial, combo, directory, nightly=False):
