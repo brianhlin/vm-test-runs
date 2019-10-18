@@ -5,7 +5,10 @@ serial="$1"
 # Remove this job's input image, which is no longer needed.  Because input
 # images are hardlinked, there are no race conditions among jobs and their
 # linked input images.
-unlink input-image-$serial.dsk
+input_image=input-image-$serial.qcow2
+if [-f $input_image]; then
+   unlink $input_image
+fi
 
 # Extract all files from the output image and remove the output image
 ../bin/extract-job-output result-image-$serial.dsk output-$serial
