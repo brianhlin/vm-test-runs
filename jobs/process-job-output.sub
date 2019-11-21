@@ -6,4 +6,6 @@ output = process-job-output.out
 err = process-job-output.err
 log = process-job-output.log
 
+should_transfer_files = NO
+
 queue
