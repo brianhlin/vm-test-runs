@@ -6,7 +6,7 @@ serial="$1"
 # images are hardlinked, there are no race conditions among jobs and their
 # linked input images.
 input_image=input-image-$serial.dsk
-if [-f $input_image]; then
+if [ -f $input_image ]; then
    unlink $input_image
 fi
 
