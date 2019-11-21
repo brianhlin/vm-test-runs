@@ -1,6 +1,6 @@
 universe = local
 executable = ../bin/process-job-output
-arguments = "$(serial) $(jobid)"
+arguments = "$(serial)"
 
 output = process-job-output.out
 err = process-job-output.err
