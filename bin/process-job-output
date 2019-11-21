@@ -5,7 +5,7 @@ serial="$1"
 # Remove this job's input image, which is no longer needed.  Because input
 # images are hardlinked, there are no race conditions among jobs and their
 # linked input images.
-input_image=input-image-$serial.qcow2
+input_image=input-image-$serial.dsk
 if [-f $input_image]; then
    unlink $input_image
 fi
