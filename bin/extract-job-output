@@ -33,34 +33,36 @@ g.add_drive_opts(image_filename, readonly=1)
 print_now("Extracting files from '%s'..." % (image_filename))
 g.launch()
 
+print_now("Listing filesystems...")
 filesystems = g.list_filesystems()
 if len(filesystems) != 1:
-    print 'Found %d filesystems, unable to continue' % len(filesystems)
+    print_now('Found %d filesystems, unable to continue' % len(filesystems))
     sys.exit(2)
 
+print_now("Mounting filesystems...")
 g.mount(filesystems[0][0], '/')
 stat = g.statvfs('/')
+print_now("Stat: %s" % stat)
 
 # Write IO image free space to a file, expecting the bsize to be 1024, or 1M
+print_now("Calculating free space...")
 free_space = format(float(stat['bavail'])/stat['bsize'], '.1f') + 'M'
 f = open(output_dir + '/io_free_size', 'w')
 f.write(free_space)
 f.close()
 
 paths = g.find('/')
+print_now("Paths: %s" % paths)
 for image_path in paths:
     full_image_path = os.path.join('/', image_path)
-    # print "Processing '%s'..." % (full_image_path)
-    # if full_image_path in blacklist:
-        # print "  - skipping"
-
+    print_now("Full image path: %s" % full_image_path)
     if not g.is_dir(full_image_path):
         image_dir = os.path.dirname(image_path)
         local_dir = os.path.join(output_dir, image_dir)
         if not os.path.exists(local_dir):
-            # print "  - creating directory"
+            print_now("Creating local dir: %s" % local_dir)
             os.makedirs(local_dir)
-            # print "  - extracting"
+
         g.download(full_image_path, os.path.join(output_dir, image_path))
 
 os.remove(image_filename)
