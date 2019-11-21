@@ -2,9 +2,9 @@ universe = local
 executable = ../bin/process-job-output
 arguments = "$(serial)"
 
-output = process-job-output.out
-err = process-job-output.err
-log = process-job-output.log
+output = process-job-output-$(serial).out
+err = process-job-output-$(serial).err
+log = process-job-output-$(serial).log
 
 should_transfer_files = NO
 
