@@ -98,6 +98,7 @@ if __name__ == '__main__':
     # Start DAG file
     dag_contents = '# osg-test run generated %s\n' % (time.strftime('%Y-%m-%d %H:%M'))
     dag_contents += 'CONFIG inner-dag.config\n'
+    dag_contents += 'MAXJOBS PostProcess 100\n'
 
     # bail if there aren't corresponding VM images before writing any config
     for param_file in run_params:
