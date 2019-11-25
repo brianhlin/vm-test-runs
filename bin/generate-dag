@@ -29,7 +29,6 @@ def generate_dag_fragment(serial, combo):
     contents += 'JOB %s process-job-output.sub\n' % (post_node_name)
     contents += 'VARS %s serial="%s"\n' % (post_node_name, serial)
     contents += 'CATEGORY %s PostProcess\n' % (post_node_name)
-    contents += '\n'
     contents += 'PARENT %s CHILD %s\n' %(test_node_name, post_node_name)
 
     return contents
