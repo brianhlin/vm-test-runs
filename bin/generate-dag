@@ -19,6 +19,7 @@ DAG_FRAGMENT = '''
 #########################
 JOB CreateImage{serial} create-io-image.sub
 VARS CreateImage{serial} serial="{serial}"
+CATEGORY CreateImage{serial} LocalImageIO
 
 JOB TestRun{serial} single-test-run.sub
 VARS TestRun{serial} serial="{serial}" platform="{platform}" jobpriority="{priority}"
@@ -27,6 +28,7 @@ SCRIPT POST TestRun{serial} ../bin/write-job-id {serial} $JOBID
 
 JOB ProcessResult{serial} process-job-output.sub
 VARS ProcessResult{serial} serial="{serial}"
+CATEGORY ProcessResult{serial} LocalImageIO
 
 JOB CleanOutput{serial} clean-job-output.sub
 VARS CleanOutput{serial} serial="{serial}"
@@ -113,7 +115,8 @@ if __name__ == '__main__':
     # Start DAG file
     dag_contents = '# osg-test run generated %s\n' % (time.strftime('%Y-%m-%d %H:%M'))
     dag_contents += 'CONFIG inner-dag.config\n'
-    dag_contents += 'VARS ALL_NODES run_dir="%s"' % os.path.dirname(test_run_directory)
+    dag_contents += 'VARS ALL_NODES run_dir="%s"\n' % os.path.dirname(test_run_directory)
+    dag_contents += 'MAXJOBS LocalImageIO 10\n'
 
     # bail if there aren't corresponding VM images before writing any config
     for param_file in run_params:
